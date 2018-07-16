@@ -14,40 +14,27 @@ CREATE TABLE products(
   PRIMARY KEY (id)
 );
 
----------------------------------------------------------------
+INSERT INTO products (product_name , department_name , price , stock_quantity)
+VALUES ("soda","beverages","1.5","40");
 
 INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("milk","Food","2","4");
+VALUES ("ice coffee","beverages","3.5","120");
 
 INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("chips","Food","3","7");
+VALUES ("pizza","food","6.88","50");
 
 INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("juice","Food","2","20");
+VALUES ("i-phones","electronics","900","200");
 
 INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("shirt","Clothing","6","20");
+VALUES ("mac-book pro","electronics","1100","22");
 
 INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("shoes","Clothing","15","13");
+VALUES ("BBQ Chicken","food","6","12");
 
 INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("socks","Clothing","5","40");
+VALUES ("kids bags","miscl","22","10");
 
-INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("phone","Electronics","100","9");
-
-INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("head-phone","Electronics","10","30");
-
-INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("computer","Electronics","200","3");
-
-INSERT INTO products (product_name , department_name , price , stock_quantity)
-VALUES ("TV","Electronics","300","4");
-
-
----------------------------------------------------------------
 
 CREATE TABLE departments(
   department_id INT NOT NULL AUTO_INCREMENT,
@@ -57,7 +44,13 @@ CREATE TABLE departments(
 );
 ----------------------------------------------------------------
 INSERT INTO departments ( department_name , over_head_costs)
-VALUES ("Electronics","100");
+VALUES ("beverages","50");
 
 INSERT INTO departments ( department_name , over_head_costs)
-VALUES ("Clothing","200");
+VALUES ("electronics","200");
+
+INSERT INTO departments ( department_name , over_head_costs)
+VALUES ("kids bags","200");
+
+INSERT INTO departments ( department_name , over_head_costs)
+VALUES ("food","200");

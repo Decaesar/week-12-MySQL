@@ -12,11 +12,11 @@ var connection = mysql.createConnection({
 //--------------------------------------------------------------------
 connection.connect(function (err) {
   console.log("conected as id: " + connection.threadId);
-  start()
+  queryAllProducts()
 })
 
 //----------------------------------------------------------------------
-function start() {
+function queryAllProducts() {
 
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
@@ -24,6 +24,7 @@ function start() {
       console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$" + res[i].price + " | "
        + res[i].stock_quantity+ " | " + res[i].product_sales );
     }
+
     console.log("-----------------------------------");
   });
   postProducts()
@@ -36,7 +37,7 @@ function postProducts() {
     .prompt([{
       name: "id",
       type: "input",
-      message: "Pleace inter the number of item you would like to buy?\n",
+      message: "Enter the item ID you would like to buy?\n",
       validate: function (value) {
         if (isNaN(value) === false) {
           return true;
@@ -46,7 +47,7 @@ function postProducts() {
     }, {
       name: "q",
       type: "input",
-      message: "Pleace inter the quantity?\n",
+      message: "Enter the quantity?\n",
       validate: function (value) {
         if (isNaN(value) === false) {
           return true;
@@ -55,11 +56,10 @@ function postProducts() {
       }
     }]).then(function (answer) {
       // console.log(answer);
-      //the quantity of the custmer.
-      var qCustmer = parseInt(answer.q);
+      //the quantity of the customer.
+      var qCustomer = parseInt(answer.q);
 
       connection.query("SELECT * FROM products where id =?", answer.id, function (err, res) {
-
 
         if (err) throw err;
 
@@ -67,9 +67,9 @@ function postProducts() {
         function quantity() {
           for (var i = 0; i < res.length; i++) {
 
-            var qstore = res[i].stock_quantity;
+            var quantityinStore = res[i].stock_quantity;
 
-            if (qstore < qCustmer) {
+            if (quantityinStore < qCustomer) {
               //tell the custmer there is Insufficient quantity.
               console.log("\nInsufficient quantity!")
             } else {
@@ -78,32 +78,36 @@ function postProducts() {
                 return price * quantity;
               }
               console.log("-------------casher--------------");
-              console.log(" \nthe total cost is: $" + cost(res[i].price, qCustmer));
+              console.log(" \nthe total cost is: $" + cost(res[i].price, qCustomer));
 
-              connection.query("update products SET ? WHERE ?", [{product_sales:cost(res[i].price, qCustmer)},{id: answer.id}],
+              connection.query("update products SET ? WHERE ?", [{product_sales:cost(res[i].price, qCustomer)},{id: answer.id}],
                function (err, res) {
 
                 if (err) throw err;
                 console.log("\n ======product_sales was update======  ")
                });
 //--------------------------------------------------------------------------------------
-              //update the remnding quantity.
-              function updateQ(q1, q2) {
+              //update the remainig quantity.
+              function updateQuantity(q1, q2) {
                 return q1 - q2;
               }
 
               connection.query("UPDATE products SET ? WHERE ?", [{
-                  stock_quantity: updateQ(qstore, qCustmer)
+                  stock_quantity: updateQuantity(quantityinStore, qCustomer)
                 }, {
                   id: answer.id
                 }],
                 function (err, res) {
                   if (err) throw err;
 
+                  console.log("\n Thanks for your purchase ");
+                  console.log("\n  ");
                   console.log("\n------------update item--------------");
                   console.log("\nthe stock_quantity for item " + answer.id + " was update ");
+                  console.log("\n  ");
+                  console.log("\n  ");
                   console.log("-----------the end------------\n\n");
-                  start();
+                  queryAllProducts();
                 });
               }
           }
